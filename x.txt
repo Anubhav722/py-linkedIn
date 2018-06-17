@@ -1,0 +1,111 @@
+After opening user's linkedin profile:
+
+# To connect
+connect = driver.find_element_by_xpath('//span[text()="Connect"]')
+connect.click()
+
+# To message
+message = driver.find_element_by_xpath('//span[text()="Message"]')
+message.click()
+
+# Show more (bio)
+show_more = driver.find_element_by_xpath('//span[text()="Show more"]')
+show_more.click()
+
+
+# See contact info
+see_contact_info = driver.find_element_by_xpath('//*[@class="pv-top-card-v2-section__entity-name pv-top-card-v2-section__contact-info ml2 Sans-15px-black-85%-semibold"]')
+see_contact_info.click()
+
+sel = Selector(text=driver.page_source)
+contact_info = sel.xpath('//*[starts-with(@class, "pv-contact-info__contact-link Sans-15px-black-85%")]/text()').extract()
+
+import re
+list_of_info_urls = []
+for info in contact_info:
+    if 'href' in info:
+        list_of_info_urls.append(re.findall('https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', info))
+
+
+# After above step fallback to initial url
+
+driver.get(linkedin_urls[0])
+
+# "More..." button click # the class of button in xpath
+
+more = driver.find_element_by_xpath('//*[@class="pv-s-profile-actions__overflow-toggle  button-secondary-large-muted mt2"]')
+more.click()
+
+# Share Profile
+
+share_profile = driver.find_element_by_xpath('//span[text()="Share Profile"]')
+share_profile.click()
+
+# Follow
+
+follow = driver.find_element_by_xpath('//span[text()="Follow"]')
+follow.click()
+
+# Save to PDF
+
+save_to_pdf = driver.find_element_by_xpath('//span[text()="Save to PDF"]')
+save_to_pdf.click()
+
+# Report/Block
+
+report_block = driver.find_element_by_xpath('//span[text()="Report / Block"]')
+report_block.click()
+
+
+### To report this profile
+to_report = driver.find_element_by_xpath('//span[text()="Report this profile"]')
+to_report.click()
+
+to_block = driver.find_element_by_xpath('//*[@class="ember-semaphore__button ember-semaphore__button--menuitem"]')
+to_block.click()
+
+
+# Mutual Connections
+
+mutual_connections = driver.find_element_by_xpath('//*[@class="pv-highlight-entity__primary-text Sans-17px-black-85%-semibold"]')
+mutual_connections.click()
+
+
+# Experience
+
+
+sel = Selector(text=driver.page_source)
+experiences = sel.xpath('//*[starts-with(@class, "Sans-17px-black-85%-semibold")]').extract()
+experience_list = []
+
+for experience in experiences:
+    experience_list.append(experience)
+
+
+# Messaging
+
+messaging_button = driver.find_element_by_xpath('//*[@class="msg-overlay-bubble-header__primary-text truncate Sans-15px-black-85%"]')
+messaging_button.click()
+
+### To perform search
+search = driver.find_element_by_xpath('//*[@class="msg-overlay-list-bubble-search__search-typeahead-input ember-text-field ember-view"]')
+search.send_keys('parth sharma')
+
+### After performing search opening chat room # choosig the top one here.
+person = driver.find_element_by_xpath('//*[@class=" presence-entity__image EntityPhoto-circle-2 ember-view"]')
+person.click()
+
+### Navigating to the input bar of the chat room
+message_input_bar = driver.find_element_by_xpath('//*[@class="ember-text-area msg-form__textarea Sans-15px-black-85% ember-view"]')
+message_input_bar.send_keys('hi there')
+
+### Sending the message
+send_message_button = driver.find_element_by_xpath('//*[@class="msg-form__send-button button-tertiary-small"]')
+send_message_button.click()
+
+### recent conversations
+recent_conversations_people = sel.xpath('//*[starts-with(@class, "msg-conversation-listitem__participant-names msg-conversation-card__participant-names truncate Sans-15px-black-70%")]/text()').extract()
+
+
+
+
